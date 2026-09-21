@@ -1,4 +1,5 @@
 export interface Env { CATALOG: D1Database; ADMIN_PASSWORD: string; SITE_ORIGIN?: string; }
+// Runtime credentials are configured in Cloudflare Worker secrets, never in this repository.
 
 const headers = (origin: string) => ({
   "content-type": "application/json; charset=utf-8",
