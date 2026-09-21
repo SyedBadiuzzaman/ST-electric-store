@@ -11,9 +11,11 @@ Features:
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from os import getenv
+from pathlib import Path
 from typing import Any, Optional
 from fastapi import FastAPI, HTTPException, Header, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import (
     JSON,
@@ -30,6 +32,8 @@ from sqlalchemy import (
     text,
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
+
+load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 DATABASE_URL = getenv("DATABASE_URL", "sqlite:///./hassan_electric.db").replace(
     "postgres://", "postgresql+psycopg://", 1
