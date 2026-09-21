@@ -15,6 +15,9 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const origin = env.SITE_ORIGIN || "*";
     if (request.method === "OPTIONS") return send({}, 204, origin);
+    if (new URL(request.url).pathname === "/api/health") {
+      return send({ ok: true, databaseBound: Boolean(env.CATALOG), adminPasswordConfigured: Boolean(env.ADMIN_PASSWORD) }, 200, origin);
+    }
     const parts = new URL(request.url).pathname.split("/").filter(Boolean);
     const isAdmin = parts[1] === "admin";
     const resource = (isAdmin ? parts[2] : parts[1]) as "products" | "categories";
