@@ -26,7 +26,10 @@ export default {
         const row = await env.CATALOG.prepare(`SELECT * FROM ${table} WHERE slug = ?`).bind(idOrSlug).first<any>();
         return row ? send(table === "products" ? product(row) : row, 200, origin) : send({ detail: "Not found" }, 404, origin);
       }
-      const rows = await env.CATALOG.prepare(`SELECT * FROM ${table} ORDER BY id DESC`).all<any>();
+      const category = new URL(request.url).searchParams.get("category");
+      const rows = category && table === "products"
+        ? await env.CATALOG.prepare("SELECT * FROM products WHERE category_slug = ? ORDER BY id DESC").bind(category).all<any>()
+        : await env.CATALOG.prepare(`SELECT * FROM ${table} ORDER BY id DESC`).all<any>();
       return send(rows.results.map((row) => table === "products" ? product(row) : row), 200, origin);
     }
 

@@ -31,16 +31,18 @@ export default function AdminDashboardPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!passcode.trim()) return;
+    if (!apiUrl) {
+      alert("Catalogue API is not connected yet. Add NEXT_PUBLIC_API_URL in the Cloudflare frontend Worker variables, then redeploy.");
+      return;
+    }
     try {
-      if (apiUrl) {
-        const res = await fetch(`${apiUrl}/api/admin/products`, { headers: { "X-Admin-Key": passcode } });
-        if (!res.ok) throw new Error("The admin key was not accepted by the server.");
-        const remoteProducts = (await res.json()).map(fromApi);
-        setProductsList(remoteProducts); setSelectedProductSlug(remoteProducts[0]?.slug || "");
-        const categoryResponse = await fetch(`${apiUrl}/api/admin/categories`, { headers: { "X-Admin-Key": passcode } });
-        if (categoryResponse.ok) setCategoriesList((await categoryResponse.json()).map(categoryFromApi));
-      }
-      setAdminKey(passcode); setIsAuthenticated(true); setNotification(apiUrl ? "Connected to your live product catalogue." : "Demo mode: connect NEXT_PUBLIC_API_URL to save products permanently.");
+      const res = await fetch(`${apiUrl}/api/admin/products`, { headers: { "X-Admin-Key": passcode } });
+      if (!res.ok) throw new Error(res.status === 401 ? "Password is incorrect. It must exactly match ADMIN_PASSWORD in the Cloudflare API Worker secrets." : "Catalogue API is unavailable. Check the API Worker URL and D1 database setup.");
+      const remoteProducts = (await res.json()).map(fromApi);
+      setProductsList(remoteProducts); setSelectedProductSlug(remoteProducts[0]?.slug || "");
+      const categoryResponse = await fetch(`${apiUrl}/api/admin/categories`, { headers: { "X-Admin-Key": passcode } });
+      if (categoryResponse.ok) setCategoriesList((await categoryResponse.json()).map(categoryFromApi));
+      setAdminKey(passcode); setIsAuthenticated(true); setNotification("Connected to your live product catalogue.");
       setTimeout(() => setNotification(null), 3500);
     } catch (error) {
       alert(error instanceof Error ? error.message : "Unable to sign in.");
