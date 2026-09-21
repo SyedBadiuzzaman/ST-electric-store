@@ -6,7 +6,7 @@ const headers = (origin: string) => ({
   "access-control-allow-headers": "content-type,x-admin-key",
   "access-control-allow-methods": "GET,POST,PUT,DELETE,OPTIONS",
 });
-const send = (data: unknown, status = 200, origin = "*") => new Response(JSON.stringify(data), { status, headers: headers(origin) });
+const send = (data: unknown, status = 200, origin = "*") => new Response(status === 204 ? null : JSON.stringify(data), { status, headers: headers(origin) });
 const slug = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 const product = (row: any) => ({ ...row, specs: JSON.parse(row.specs_json || "{}"), is_indexable: Boolean(row.is_indexable) });
 
