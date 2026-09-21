@@ -1,1 +1,1 @@
-{"$schema":"node_modules/wrangler/config-schema.json","name":"hassan-electric-catalog-api","main":"src/index.ts","compatibility_date":"2026-09-21","d1_databases":[{"binding":"CATALOG","database_name":"hassan-electric-catalog","database_id":"REPLACE_WITH_YOUR_D1_DATABASE_ID"}]}
+{"$schema":"node_modules/wrangler/config-schema.json","name":"hassan-electric-catalog-api","main":"src/index.ts","compatibility_date":"2026-09-21","d1_databases":[{"binding":"CATALOG","database_name":"hassan-electric-catalog","database_id":"28dafd2f-54ca-439e-b0fe-51ebbc55b4ff"}]}
