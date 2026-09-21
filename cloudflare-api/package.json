@@ -1,0 +1,1 @@
+{"name":"hassan-electric-catalog-api","private":true,"scripts":{"deploy":"wrangler deploy","db:migrate":"wrangler d1 migrations apply hassan-electric-catalog --remote"},"devDependencies":{"wrangler":"^4.136.0"}}
