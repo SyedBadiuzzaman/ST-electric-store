@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "hassan-electric-storefront",
+  "name": "hassan-electric-traders",
   "compatibility_date": "2026-09-21",
   "compatibility_flags": [
     "nodejs_compat"
@@ -16,12 +16,5 @@
   },
   "cache": {
     "enabled": false
-  },
-  "services": [
-    {
-      "binding": "RESPONSE_STORE",
-      "service": "hassan-electric-storefront-response-store",
-      "entrypoint": "ResponseStoreService"
-    }
-  ]
+  }
 }
