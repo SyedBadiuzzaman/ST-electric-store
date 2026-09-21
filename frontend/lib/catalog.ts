@@ -438,7 +438,7 @@ export const faqs: FAQItem[] = [
 ];
 
 // --- Retrieval helpers with fallback ---
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://hassan-electric-catalog-api.menttech4000.workers.dev";
 
 export async function fetchProducts(categorySlug?: string): Promise<Product[]> {
   try {

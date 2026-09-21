@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { categories, products, articles } from "@/lib/catalog";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hassanelectric.example";
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://hassan-electric-catalog-api.menttech4000.workers.dev";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
