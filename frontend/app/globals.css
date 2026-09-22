@@ -445,6 +445,9 @@ h1, .hero-title {
 .product-loading { padding:80px 20px; text-align:center; }
 .inline-category { display:flex; gap:8px; margin-top:8px; }
 .inline-category .form-input { min-width:0; }
+.option-editor-list { display:grid; gap:8px; margin-top:12px; }
+.option-editor-item { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; border:1px solid #dbe4ee; border-radius:10px; background:#f8fafc; font-size:14px; }
+.option-editor-item .button { flex:0 0 auto; }
 @keyframes whatsapp-bob { 0%,100% { transform:translateY(-50%); } 50% { transform:translateY(calc(-50% - 10px)); } }
 
 .category-card {

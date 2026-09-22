@@ -5,7 +5,7 @@ import Link from "next/link";
 import { products as initialProducts, categories as initialCategories, articles as initialArticles, faqs as initialFaqs, business, type Product, type Category } from "@/lib/catalog";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
-const blankProduct: Product = { name: "New product", slug: "new-product", category: "wires-and-cables", price: 0, currency: "PKR", image: "/images/cable-image.png", imageAlt: "", shortDescription: "", description: "", sku: "NEW-SKU", brand: "", availability: "InStock", specs: {}, isIndexable: true };
+const blankProduct: Product = { name: "New product", slug: "new-product", category: "wires-and-cables", price: 0, currency: "PKR", image: "/images/cable-image.png", imageAlt: "", shortDescription: "", description: "", sku: "NEW-SKU", brand: "", availability: "InStock", specs: {}, colors: [], options: [], isIndexable: true };
 const fromApi = (p: any): Product => ({ name:p.name, slug:p.slug, category:p.category_slug, price:p.price, currency:p.currency, image:p.image_url || "/images/cable-image.png", imageAlt:p.image_alt || "", shortDescription:p.short_description, description:p.description, sku:p.sku, brand:p.brand, availability:p.availability, specs:p.specs || {}, colors:p.colors || [], options:p.options || [], seoTitle:p.seo_title, metaDescription:p.meta_description, canonicalUrl:p.canonical_url, isIndexable:p.is_indexable });
 const toApi = (p: Product) => ({ name:p.name, slug:p.slug, category_slug:p.category, price:p.price, currency:p.currency, image_url:p.image, image_alt:p.imageAlt, short_description:p.shortDescription, description:p.description, sku:p.sku, brand:p.brand || null, availability:p.availability, specs:p.specs, colors:p.colors || [], options:p.options || [], seo_title:p.seoTitle || null, meta_description:p.metaDescription || null, canonical_url:p.canonicalUrl || null, is_indexable:p.isIndexable !== false });
 type AdminCategory = Category & { id?: number };
@@ -26,6 +26,8 @@ export default function AdminDashboardPage() {
   const [newCategoryDescription, setNewCategoryDescription] = useState("");
   const [inlineCategoryName, setInlineCategoryName] = useState("");
   const [editingCategory, setEditingCategory] = useState<AdminCategory | null>(null);
+  const [newOptionName, setNewOptionName] = useState("");
+  const [newOptionValues, setNewOptionValues] = useState("");
 
   // Authentication check
   const handleLogin = async (e: React.FormEvent) => {
@@ -73,6 +75,28 @@ export default function AdminDashboardPage() {
     setProductsList((prev) => prev.map((p) => (p.slug === updated.slug ? updated : p)));
     setNotification(`Updated ${updated.name} successfully.`);
     setTimeout(() => setNotification(null), 3000);
+  };
+
+  const addProductOption = () => {
+    const name = newOptionName.trim();
+    const values = newOptionValues.split(",").map((value) => value.trim()).filter(Boolean);
+    if (!name || values.length === 0) {
+      setNotification("Option ka naam aur kam az kam aik choice likhein.");
+      setTimeout(() => setNotification(null), 3000);
+      return;
+    }
+    const currentOptions = selectedProduct.options || [];
+    const existingIndex = currentOptions.findIndex((option) => option.name.toLowerCase() === name.toLowerCase());
+    const options = existingIndex === -1
+      ? [...currentOptions, { name, values }]
+      : currentOptions.map((option, index) => index === existingIndex ? { name: option.name, values } : option);
+    handleUpdateProduct({ ...selectedProduct, options });
+    setNewOptionName("");
+    setNewOptionValues("");
+  };
+
+  const removeProductOption = (name: string) => {
+    handleUpdateProduct({ ...selectedProduct, options: (selectedProduct.options || []).filter((option) => option.name !== name) });
   };
 
   const generateDescription = () => {
@@ -425,7 +449,18 @@ export default function AdminDashboardPage() {
                 <small className="char-count">Upload images to Cloudflare R2 (recommended) or use a reliable public image URL. This image appears on the product page and in search sharing cards.</small>
                 {selectedProduct.image && <div className="admin-image-preview"><img src={selectedProduct.image} alt={selectedProduct.imageAlt || "Product preview"}/><span>Image preview</span></div>}
                 <div className="form-group"><label>Colors (Roman Urdu: rang comma se likhein)</label><input className="form-input" value={(selectedProduct.colors || []).join(", ")} onChange={(e) => handleUpdateProduct({ ...selectedProduct, colors: e.target.value.split(",").map((color) => color.trim()).filter(Boolean) })} placeholder="Red, Black, White" /><small className="char-count">Customer ko rang ke color dots nazar aayenge.</small></div>
-                <div className="form-group"><label>Optional sizes / options</label><textarea className="form-input" rows={3} value={(selectedProduct.options || []).map((option) => `${option.name}: ${option.values.join(", ")}`).join("\n")} onChange={(e) => handleUpdateProduct({ ...selectedProduct, options:e.target.value.split("\n").map((line) => { const [name, values] = line.split(":"); return name?.trim() && values ? { name:name.trim(), values:values.split(",").map(value=>value.trim()).filter(Boolean) } : null; }).filter(Boolean) as { name:string; values:string[] }[] })} placeholder={"Wire Size: 1.5mm, 2.5mm, 4mm\nLength: 90m, 100m"} /><small className="char-count">Optional hai. Wire ke liye size/length, switch ke liye Button Count: 1, 2, 3 likhein.</small></div>
+                <div className="form-group">
+                  <label>Size / customer choices (optional)</label>
+                  <div className="form-row">
+                    <div className="form-group flex-1"><input className="form-input" value={newOptionName} onChange={(e) => setNewOptionName(e.target.value)} placeholder="Option name: Wire Size, Length, Button Count" /></div>
+                    <div className="form-group flex-1"><input className="form-input" value={newOptionValues} onChange={(e) => setNewOptionValues(e.target.value)} placeholder="Choices: 1.5mm, 2.5mm, 4mm" /></div>
+                  </div>
+                  <button type="button" className="button outline small" onClick={addProductOption}>Add size / choice</button>
+                  {(selectedProduct.options || []).length > 0 && <div className="option-editor-list">
+                    {(selectedProduct.options || []).map((option) => <div className="option-editor-item" key={option.name}><span><strong>{option.name}</strong>: {option.values.join(", ")}</span><button type="button" className="button outline small" onClick={() => removeProductOption(option.name)}>Remove</button></div>)}
+                  </div>}
+                  <small className="char-count">Misal: naam mein <strong>Wire Size</strong> aur choices mein <strong>1.5mm, 2.5mm, 4mm</strong>. Phir Add size / choice dabayein. Aakhir mein Save product zaroor dabayein.</small>
+                </div>
               </div>
 
               <div className="form-group">
