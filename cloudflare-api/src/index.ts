@@ -9,7 +9,7 @@ const headers = (origin: string) => ({
 });
 const send = (data: unknown, status = 200, origin = "*") => new Response(status === 204 ? null : JSON.stringify(data), { status, headers: headers(origin) });
 const slug = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-const product = (row: any) => ({ ...row, specs: JSON.parse(row.specs_json || "{}"), colors: JSON.parse(row.colors_json || "[]"), is_indexable: Boolean(row.is_indexable) });
+const product = (row: any) => ({ ...row, specs: JSON.parse(row.specs_json || "{}"), colors: JSON.parse(row.colors_json || "[]"), options: JSON.parse(row.options_json || "[]"), is_indexable: Boolean(row.is_indexable) });
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -61,7 +61,7 @@ export default {
     const values: Record<string, any> = table === "products" ? {
       ...common, category_slug: slug(raw.category_slug || ""), price: Number(raw.price || 0), currency: raw.currency || "PKR",
       image_alt: raw.image_alt || name, short_description: raw.short_description || description, sku: raw.sku || common.slug,
-      brand: raw.brand || null, availability: raw.availability || "InStock", specs_json: JSON.stringify(raw.specs || {}), colors_json: JSON.stringify(Array.isArray(raw.colors) ? raw.colors : []),
+      brand: raw.brand || null, availability: raw.availability || "InStock", specs_json: JSON.stringify(raw.specs || {}), colors_json: JSON.stringify(Array.isArray(raw.colors) ? raw.colors : []), options_json: JSON.stringify(Array.isArray(raw.options) ? raw.options : []),
       canonical_url: raw.canonical_url || null, is_indexable: raw.is_indexable === false ? 0 : 1,
     } : common;
     const columns = Object.keys(values);

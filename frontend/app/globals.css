@@ -434,6 +434,15 @@ h1, .hero-title {
 .catalog-filters button.active { background:var(--blue); color:#fff; border-color:var(--blue); }
 .product-colors { display:flex; gap:6px; margin:10px 0; }
 .product-colors span { width:17px; height:17px; border-radius:50%; border:1px solid #cbd5e1; }
+.catalog-browser .product-grid { grid-template-columns:repeat(auto-fill,minmax(175px,1fr)); gap:14px; }
+.catalog-browser .product-card .card-image-wrap { aspect-ratio:1; }
+.catalog-browser .product-card .card-image-wrap img { height:100%; object-fit:cover; }
+.detail-option { display:grid; gap:8px; margin:18px 0; }
+.choice-row { display:flex; flex-wrap:wrap; gap:8px; }
+.choice { border:1px solid var(--line); background:#fff; border-radius:999px; padding:8px 12px; font:inherit; cursor:pointer; }
+.choice.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+.color-choice { width:29px; height:29px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 1px #cbd5e1; cursor:pointer; }
+.product-loading { padding:80px 20px; text-align:center; }
 .inline-category { display:flex; gap:8px; margin-top:8px; }
 .inline-category .form-input { min-width:0; }
 @keyframes whatsapp-bob { 0%,100% { transform:translateY(-50%); } 50% { transform:translateY(calc(-50% - 10px)); } }
@@ -1563,6 +1572,10 @@ h1, .hero-title {
   .conversion-btn span { display:none; }
   .conversion-btn .btn-icon { width:22px; height:22px; }
   .catalog-search input { min-height:54px; font-size:16px; }
+  .catalog-browser .product-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+  .catalog-browser .product-card .card-content { padding:12px; }
+  .catalog-browser .card-title { font-size:14px; line-height:1.25; }
+  .catalog-browser .card-snippet { display:none; }
 
   .location-banner {
     padding: 32px 20px;

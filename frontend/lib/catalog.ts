@@ -65,6 +65,7 @@ export interface Product {
   availability: "InStock" | "OutOfStock";
   specs: Record<string, string>;
   colors?: string[];
+  options?: { name: string; values: string[] }[];
   seoTitle?: string;
   metaDescription?: string;
   canonicalUrl?: string;
