@@ -24,7 +24,7 @@ export default function AdminDashboardPage() {
   const [isNewProduct, setIsNewProduct] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newCategoryDescription, setNewCategoryDescription] = useState("");
-  const [newCategoryImage, setNewCategoryImage] = useState("");
+  const [inlineCategoryName, setInlineCategoryName] = useState("");
   const [editingCategory, setEditingCategory] = useState<AdminCategory | null>(null);
 
   // Authentication check
@@ -109,8 +109,8 @@ export default function AdminDashboardPage() {
   const addCategory = async () => {
     const name = newCategoryName.trim(); if (!name) return;
     const slug = name.toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
-    const description = newCategoryDescription.trim() || `${name} available from Hassan Electric & Traders.`; const image = newCategoryImage.trim() || "/images/cable-image.png";
-    try { if (apiUrl) { const response=await fetch(`${apiUrl}/api/admin/categories`,{method:"POST",headers:{"Content-Type":"application/json","X-Admin-Key":adminKey},body:JSON.stringify({name,slug,description,image_url:image})}); if(!response.ok) throw new Error((await response.json()).detail || "Category could not be added"); const saved=categoryFromApi(await response.json()); setCategoriesList(prev=>[...prev,saved]); } else setCategoriesList(prev=>[...prev,{name,slug,description,image}]); setNewCategoryName(""); setNewCategoryDescription(""); setNewCategoryImage(""); setNotification(`Added ${name}.`); } catch(error) { alert(error instanceof Error ? error.message : "Unable to add category."); }
+    const description = newCategoryDescription.trim() || `${name} products available from Hassan Electric & Traders.`;
+    try { if (apiUrl) { const response=await fetch(`${apiUrl}/api/admin/categories`,{method:"POST",headers:{"Content-Type":"application/json","X-Admin-Key":adminKey},body:JSON.stringify({name,slug,description,image_url:""})}); if(!response.ok) throw new Error((await response.json()).detail || "Category could not be added"); const saved=categoryFromApi(await response.json()); setCategoriesList(prev=>[...prev,saved]); handleUpdateProduct({ ...selectedProduct, category:saved.slug }); } else { setCategoriesList(prev=>[...prev,{name,slug,description,image:""}]); handleUpdateProduct({ ...selectedProduct, category:slug }); } setNewCategoryName(""); setNewCategoryDescription(""); setInlineCategoryName(""); setNotification(`Category ${name} add ho gayi aur product ke liye select ho gayi.`); } catch(error) { alert(error instanceof Error ? error.message : "Unable to add category."); }
   };
   const saveCategoryEdit = async () => {
     if (!editingCategory?.name.trim()) return;
@@ -196,12 +196,6 @@ export default function AdminDashboardPage() {
           onClick={() => setActiveTab("products")}
         >
           Products ({productsList.length})
-        </button>
-        <button
-          className={`tab-btn ${activeTab === "categories" ? "active" : ""}`}
-          onClick={() => setActiveTab("categories")}
-        >
-          Categories ({categoriesList.length})
         </button>
         <button
           className={`tab-btn ${activeTab === "articles" ? "active" : ""}`}
@@ -350,7 +344,7 @@ export default function AdminDashboardPage() {
               </div>
 
               <div className="form-row">
-                <div className="form-group flex-1"><label>Category</label><select value={selectedProduct.category} onChange={(e) => handleUpdateProduct({ ...selectedProduct, category: e.target.value })} className="form-input">{categoriesList.map(c => <option value={c.slug} key={c.slug}>{c.name}</option>)}</select></div>
+                <div className="form-group flex-1"><label>Category</label><select value={selectedProduct.category} onChange={(e) => handleUpdateProduct({ ...selectedProduct, category: e.target.value })} className="form-input"><option value="">Category select karein</option>{categoriesList.map(c => <option value={c.slug} key={c.slug}>{c.name}</option>)}</select><div className="inline-category"><input className="form-input" value={inlineCategoryName} onChange={(e)=>{setInlineCategoryName(e.target.value);setNewCategoryName(e.target.value)}} placeholder="Nayi category, jaise LED Lights" /><button type="button" className="button outline small" onClick={addCategory}>Nayi category add karein</button></div><small className="char-count">Agar category list mein nahi hai to yahan naam likhein. Image link ki zaroorat nahi.</small></div>
                 <div className="form-group flex-1"><label>Short customer description</label><input type="text" value={selectedProduct.shortDescription} onChange={(e) => handleUpdateProduct({ ...selectedProduct, shortDescription: e.target.value })} className="form-input" placeholder="Brief product summary" /></div>
               </div>
 
@@ -473,7 +467,7 @@ export default function AdminDashboardPage() {
       {activeTab === "categories" && (
         <section className="admin-tab-pane">
           <h2>Product categories</h2>
-          <div className="add-category"><input className="form-input" value={newCategoryName} onChange={(e)=>setNewCategoryName(e.target.value)} placeholder="New category name, e.g. LED Lights"/><input className="form-input" value={newCategoryDescription} onChange={(e)=>setNewCategoryDescription(e.target.value)} placeholder="Customer-facing category description"/><input className="form-input" type="url" value={newCategoryImage} onChange={(e)=>setNewCategoryImage(e.target.value)} placeholder="Category image URL"/><button className="button primary small" type="button" onClick={addCategory}>Add category</button></div>
+          <p>Categories product banate waqt add hoti hain. Unke liye image link save nahi hota.</p>
           {editingCategory && <section className="category-editor"><div><span className="eyebrow">EDIT CATEGORY</span><h3>{editingCategory.name}</h3></div><div className="form-group"><label>Category name</label><input className="form-input" value={editingCategory.name} onChange={(e)=>setEditingCategory({...editingCategory,name:e.target.value})}/></div><div className="form-group"><label>Description</label><textarea className="form-input" rows={3} value={editingCategory.description} onChange={(e)=>setEditingCategory({...editingCategory,description:e.target.value})}/></div><div className="form-group"><label>Image URL</label><input className="form-input" type="url" value={editingCategory.image} onChange={(e)=>setEditingCategory({...editingCategory,image:e.target.value})}/></div>{editingCategory.image && <img className="category-edit-image" src={editingCategory.image} alt="Category preview"/>}<div className="form-actions"><button className="button primary" type="button" onClick={saveCategoryEdit}>Save category</button><button className="button ghost" type="button" onClick={()=>setEditingCategory(null)}>Cancel</button></div></section>}
           <div className="admin-cards-list">
             {categoriesList.map((c) => (

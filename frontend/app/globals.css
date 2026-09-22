@@ -434,6 +434,8 @@ h1, .hero-title {
 .catalog-filters button.active { background:var(--blue); color:#fff; border-color:var(--blue); }
 .product-colors { display:flex; gap:6px; margin:10px 0; }
 .product-colors span { width:17px; height:17px; border-radius:50%; border:1px solid #cbd5e1; }
+.inline-category { display:flex; gap:8px; margin-top:8px; }
+.inline-category .form-input { min-width:0; }
 @keyframes whatsapp-bob { 0%,100% { transform:translateY(-50%); } 50% { transform:translateY(calc(-50% - 10px)); } }
 
 .category-card {
@@ -991,7 +993,7 @@ h1, .hero-title {
   max-width: 600px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1.3fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
 }
 
@@ -1555,9 +1557,11 @@ h1, .hero-title {
 
   .add-category { grid-template-columns: 1fr; }
   .header-actions .directions-btn { display: none; }
-  .whatsapp-float { display:flex; right:14px; top:auto; bottom:78px; padding:13px; animation: whatsapp-bob 1.5s ease-in-out infinite; }
-  .whatsapp-float span { display:none; }
+  .whatsapp-float { display:flex; right:14px; top:auto; bottom:78px; padding:12px 15px; animation: whatsapp-bob 1.5s ease-in-out infinite; }
+  .whatsapp-float span { display:inline; }
   .whatsapp-float svg { width:23px; height:23px; }
+  .conversion-btn span { display:none; }
+  .conversion-btn .btn-icon { width:22px; height:22px; }
   .catalog-search input { min-height:54px; font-size:16px; }
 
   .location-banner {

@@ -57,7 +57,7 @@ export default {
       meta_description: (description || `Shop ${name} from Hassan Electric & Traders in G-8/1 Islamabad.`).slice(0, 155),
       updated_at: new Date().toISOString(),
     };
-    if (!common.name || !common.slug || !common.image_url) return send({ detail: "Name and image URL are required." }, 400, origin);
+    if (!common.name || !common.slug || (table === "products" && !common.image_url)) return send({ detail: table === "products" ? "Name and image URL are required." : "Category name is required." }, 400, origin);
     const values: Record<string, any> = table === "products" ? {
       ...common, category_slug: slug(raw.category_slug || ""), price: Number(raw.price || 0), currency: raw.currency || "PKR",
       image_alt: raw.image_alt || name, short_description: raw.short_description || description, sku: raw.sku || common.slug,
