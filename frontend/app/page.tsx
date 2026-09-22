@@ -1,19 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { categories, products, articles, business } from "@/lib/catalog";
-import { liveCategories, liveProducts } from "@/lib/live-catalog";
-import { CategoryCarousel } from "@/components/CategoryCarousel";
+import { articles, business } from "@/lib/catalog";
+import { CatalogBrowser } from "@/components/CatalogBrowser";
 
 export default async function Home() {
-  const [liveCategoryList, liveProductList] = await Promise.all([liveCategories(), liveProducts()]);
   const featuredArticles = articles.slice(0, 3);
-  // Rotate three genuine listings each day, so the top of the shop stays useful without fake "featured" claims.
-  const day = Math.floor(Date.now() / 86_400_000);
-  const popularProducts = liveProductList
-    .map((product, index) => ({ product, rank: (index * 31 + day * 17) % Math.max(liveProductList.length, 1) }))
-    .sort((a, b) => a.rank - b.rank)
-    .slice(0, 3)
-    .map(({ product }) => product);
 
   return (
     <div className="home-wrapper">
@@ -68,30 +59,7 @@ export default async function Home() {
           <h2 id="cat-heading">Built Around What You Need</h2>
           <p>Carefully sourced electrical components for home construction, office setups, and contractor requirements.</p>
         </div>
-        <CategoryCarousel categories={liveCategoryList} />
-      </section>
-
-      {/* Popular Products */}
-      <section className="section featured" aria-labelledby="prod-heading">
-        <div className="section-head">
-          <span className="eyebrow">COMMON ENQUIRIES</span>
-          <h2 id="prod-heading">Available to ask about today</h2>
-          <p>Three changing product suggestions, with category, specifications and a direct WhatsApp enquiry.</p>
-        </div>
-        {popularProducts.length ? <div className="product-grid">{popularProducts.map((p) => (
-            <Link href={`/products/${p.slug}`} className="product-card" key={p.slug}>
-              <div className="card-image-wrap">
-                <img src={p.image} alt={p.imageAlt || p.name} loading="lazy" />
-              </div>
-              <div className="card-content">
-                <p className="card-sku">{p.category.replaceAll("-", " ")}</p>
-                <p className="card-sku">{p.sku}</p>
-                <h3 className="card-title">{p.name}</h3>
-                <p className="card-snippet">{p.shortDescription}</p>
-                <span className="card-link">View Specifications →</span>
-              </div>
-            </Link>
-          ))}</div> : <div className="empty-catalogue"><strong>Your products will appear here.</strong><span>There are no suggestions or dummy items. Add your first real product in Admin.</span></div>}
+        <CatalogBrowser />
       </section>
 
       {/* Buying Guides Preview (Item 83) */}
