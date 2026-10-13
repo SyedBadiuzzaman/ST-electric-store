@@ -30,12 +30,14 @@ Product cards open a dedicated detail page with a gallery. The WhatsApp message 
 Browser edits are immediately visible on the same browser and computer. To make those changes visible to every visitor:
 
 1. Finish editing all products.
-2. Select **Export public catalog**.
+2. Select **Download products.json**.
 3. Replace `public/data/products.json` with the downloaded `products.json` file.
 4. Run `npm start` and check the storefront and product pages.
 5. Upload the contents of `public` to your static host.
 
 For Cloudflare Pages connected to GitHub, commit and push the replaced `public/data/products.json` file. Do not manage products from a unique Cloudflare preview URL: every preview address has separate browser storage. Use localhost for editing, or use one stable production/custom-domain address, and always publish the exported catalog through GitHub before deploying other site changes.
+
+The admin page includes an **Open GitHub upload** button for this repository. Restoring a JSON backup on the live website changes only that browser; it does not change GitHub or Cloudflare. Upload the downloaded `products.json` through that GitHub button and commit it to make the catalog available on every device.
 
 The exported JSON contains the optimized product photos, so there are no extra image files to copy. Existing legacy products with one image stay visible, but the editor will require a second image before the public catalog can be exported.
 

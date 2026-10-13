@@ -1,4 +1,4 @@
-import { readProducts, subscribeCatalogChanges } from "./catalog.js?v=7";
+import { readProducts, subscribeCatalogChanges } from "./catalog.js?v=8";
 import { buildWhatsAppLink, escapeHtml, money, productHref } from "./ui.js?v=7";
 
 const form = document.querySelector("#filters");

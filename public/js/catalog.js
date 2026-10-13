@@ -113,6 +113,8 @@ const readPublicCatalog = async () => {
   }
 };
 
+export const readPublishedProducts = readPublicCatalog;
+
 const migrateLegacyCatalog = async () => {
   try {
     const legacy = JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY));

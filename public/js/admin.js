@@ -1,4 +1,4 @@
-import { MAX_DESCRIPTIONS, MAX_IMAGES, MAX_PRODUCTS, cleanProduct, exportableCatalogErrors, readProducts, resetProducts, validImage, validateProduct, writeProducts } from "./catalog.js?v=7";
+import { MAX_DESCRIPTIONS, MAX_IMAGES, MAX_PRODUCTS, cleanProduct, exportableCatalogErrors, readProducts, readPublishedProducts, resetProducts, validImage, validateProduct, writeProducts } from "./catalog.js?v=8";
 import { escapeHtml, money, showNotice } from "./ui.js?v=7";
 
 const form = document.querySelector("#product-form");
@@ -9,8 +9,22 @@ const deleteButton = document.querySelector("#delete-product");
 const imageInput = document.querySelector("#image-files");
 const imageList = document.querySelector("#image-list");
 const descriptionList = document.querySelector("#description-list");
+const publishStatus = document.querySelector("#publish-status");
 let products = [];
 let images = [];
+
+const catalogSignature = (catalog) => JSON.stringify(catalog.map(cleanProduct));
+
+const refreshPublishedStatus = async () => {
+  publishStatus.className = "publish-status checking";
+  publishStatus.textContent = "Checking the public catalog…";
+  const published = await readPublishedProducts();
+  const matches = catalogSignature(published) === catalogSignature(products);
+  publishStatus.className = "publish-status " + (matches ? "published" : "unpublished");
+  publishStatus.textContent = matches
+    ? "Published: this catalog is the same one other devices receive."
+    : "Not published: this browser has different products. Other devices still receive " + published.length + " published product" + (published.length === 1 ? "" : "s") + ".";
+};
 
 const renderList = () => {
   total.textContent = "(" + products.length + "/" + MAX_PRODUCTS + ")";
@@ -163,6 +177,7 @@ form.addEventListener("submit", async (event) => {
     products = await writeProducts(products);
     renderList();
     selectProduct(product);
+    await refreshPublishedStatus();
     showNotice(notice, "Product saved in this browser. Export the public catalog before your next GitHub or Cloudflare update.");
   } catch {
     showNotice(notice, "The browser could not save the catalog. Free some device storage and try again.", "error");
@@ -175,6 +190,7 @@ deleteButton.addEventListener("click", async () => {
   products = await writeProducts(products.filter((product) => product.id !== id));
   renderList();
   selectProduct();
+  await refreshPublishedStatus();
   showNotice(notice, "Product deleted.");
 });
 
@@ -188,8 +204,10 @@ document.querySelector("#export-catalog").addEventListener("click", () => {
   const errors = exportableCatalogErrors(products);
   if (errors.length) return showNotice(notice, "Catalog not exported. " + errors.slice(0, 3).join(" ") + (errors.length > 3 ? " Fix the remaining products too." : ""), "error");
   downloadCatalog("products.json", products);
-  showNotice(notice, "Public catalog exported. Replace public/data/products.json, then commit and push it to GitHub.");
+  showNotice(notice, "products.json downloaded. Now select Open GitHub upload, upload this file, and commit the change.");
 });
+
+document.querySelector("#check-published").addEventListener("click", refreshPublishedStatus);
 
 document.querySelector("#download-backup").addEventListener("click", () => {
   downloadCatalog("st-electric-products-backup.json", products);
@@ -205,7 +223,8 @@ document.querySelector("#restore-catalog").addEventListener("change", async (eve
     products = await writeProducts(cleaned);
     renderList();
     selectProduct();
-    showNotice(notice, "Catalog backup restored.");
+    await refreshPublishedStatus();
+    showNotice(notice, "Catalog restored on this browser only. Use the publishing steps above to show it on other devices.");
   } catch (error) {
     showNotice(notice, error.message, "error");
   } finally {
@@ -218,9 +237,11 @@ document.querySelector("#reset-catalog").addEventListener("click", async () => {
   products = await resetProducts();
   renderList();
   selectProduct();
+  await refreshPublishedStatus();
   showNotice(notice, "Local changes cleared. Published products reloaded.");
 });
 
 products = await readProducts();
 renderList();
 selectProduct();
+await refreshPublishedStatus();

@@ -6,7 +6,7 @@
   <title>Edit Products | ST Electric Store</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" href="./logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./css/styles.css?v=8">
+  <link rel="stylesheet" href="./css/styles.css?v=9">
 </head>
 <body class="admin-locked">
   <main id="admin-login" class="admin-login-shell">
@@ -28,16 +28,19 @@
   <main id="main" class="page-main">
     <div class="shell">
       <header class="page-hero"><p class="section-label">Product editor</p><h1>Build a clear product listing.</h1><p>Add up to 100 products with two to five photos and one to three short description points.</p></header>
-      <div class="local-note"><strong>No database is used.</strong> Edits are saved in this browser. Export the public catalog before uploading the website.</div>
-      <div class="deploy-warning"><strong>Before every GitHub or Cloudflare update:</strong> select <b>Export public catalog</b>, replace <code>public/data/products.json</code>, then commit and push that file. Products saved only in this browser are not included in a Cloudflare deployment.</div>
+      <div class="local-note"><strong>No database is used.</strong> Saving or restoring products changes only this browser. Use the publishing steps below to make products visible on every device.</div>
+      <section class="publish-panel" aria-labelledby="publish-title">
+        <div><p class="section-label">Publish to every device</p><h2 id="publish-title">Send this catalog to GitHub and Cloudflare.</h2><p id="publish-status" class="publish-status" aria-live="polite">Checking the public catalog…</p></div>
+        <ol><li>Download the finished <code>products.json</code>.</li><li>Open the GitHub catalog folder and upload that file, replacing the old one.</li><li>Select <strong>Commit changes</strong>. Cloudflare will deploy it automatically.</li></ol>
+        <div class="publish-actions"><button class="button" id="export-catalog" type="button">1. Download products.json</button><a class="button button-secondary" href="https://github.com/SyedBadiuzzaman/ST-electric-store/upload/main/public/data" target="_blank" rel="noopener">2. Open GitHub upload</a><button class="text-button" id="check-published" type="button">Check published catalog again</button></div>
+      </section>
       <div class="admin-layout static-admin">
         <aside class="admin-sidebar">
           <div class="filter-head"><strong>Products <span id="product-total"></span></strong><button class="text-button" id="new-product" type="button">+ New</button></div>
           <div id="admin-list" class="admin-list"></div>
           <div class="admin-actions">
-            <button class="button" id="export-catalog" type="button">Export public catalog</button>
             <button class="button button-secondary" id="download-backup" type="button">Download backup</button>
-            <label class="button button-secondary file-button">Restore backup<input id="restore-catalog" type="file" accept="application/json"></label>
+            <label class="button button-secondary file-button">Restore on this browser<input id="restore-catalog" type="file" accept="application/json"></label>
             <button class="text-button danger-button" id="reset-catalog" type="button">Reset local changes</button>
           </div>
         </aside>
@@ -69,6 +72,6 @@
   </main>
   </div>
   <script type="module" src="./js/admin-auth.js?v=1"></script>
-  <script type="module" src="./js/admin.js?v=7"></script>
+  <script type="module" src="./js/admin.js?v=8"></script>
 </body>
 </html>
