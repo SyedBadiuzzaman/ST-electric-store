@@ -13,15 +13,7 @@ export const MAX_IMAGES = 5;
 export const MIN_DESCRIPTIONS = 1;
 export const MAX_DESCRIPTIONS = 3;
 
-const sampleProducts = [
-  { id: "st-001", name: "2.5mm Pure Copper Electrical Wire", images: ["images/cable-image.png"], price: null, color: "Red", descriptions: ["Pure copper electrical wire for residential socket and power circuits."] },
-  { id: "st-002", name: "4.0mm Heavy Duty Pure Copper Wire", images: ["images/cable-image.png"], price: null, color: "Black", descriptions: ["Heavy-duty copper wire for higher-load electrical circuits."] },
-  { id: "st-003", name: "1.5mm Single Core Copper Wire", images: ["images/cable-image.png"], price: null, color: "Blue", descriptions: ["Single-core copper wire for lighting and fan circuits."] },
-  { id: "st-004", name: "3-Gang Modular Electrical Switch Board", images: ["images/switch-board.webp"], price: null, color: "White", descriptions: ["Three-button modular switch board for common room circuits."] },
-  { id: "st-005", name: "2-Gang Modular Electrical Switch Board", images: ["images/switch-board.webp"], price: null, color: "Off-white", descriptions: ["Compact two-button modular switch board."] },
-  { id: "st-006", name: "Single Pole 20A Miniature Circuit Breaker", images: ["images/cable-image.png"], price: null, color: "White", descriptions: ["Single-pole miniature circuit breaker for distribution boards."] },
-  { id: "st-007", name: "Universal Multi-Pin Socket with Switch", images: ["images/switch-board.webp"], price: null, color: "White", descriptions: ["Universal multi-pin wall socket with an integrated switch."] },
-];
+const sampleProducts = [];
 
 export const validImage = (value) => {
   const text = String(value ?? "").trim();

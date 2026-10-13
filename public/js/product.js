@@ -1,5 +1,5 @@
-import { readProducts, subscribeCatalogChanges } from "./catalog.js?v=8";
-import { buildWhatsAppLink, escapeHtml, money } from "./ui.js?v=7";
+import { readProducts, subscribeCatalogChanges } from "./catalog.js?v=10";
+import { buildWhatsAppLink, escapeHtml, money } from "./ui.js?v=9";
 
 const view = document.querySelector("#product-view");
 const id = new URLSearchParams(location.search).get("id");
