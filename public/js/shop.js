@@ -1,5 +1,5 @@
-import { readProducts, subscribeCatalogChanges } from "./catalog.js?v=5";
-import { buildWhatsAppLink, escapeHtml, money, productHref } from "./ui.js?v=5";
+import { readProducts, subscribeCatalogChanges } from "./catalog.js?v=7";
+import { buildWhatsAppLink, escapeHtml, money, productHref } from "./ui.js?v=7";
 
 const form = document.querySelector("#filters");
 const grid = document.querySelector("#product-grid");
@@ -16,7 +16,7 @@ const productCard = (product) => {
   return '<article class="product-card" data-href="' + escapeHtml(detailLink) + '">' +
     '<a class="product-image" href="' + escapeHtml(detailLink) + '"><img src="' + escapeHtml(image) + '" alt="' + escapeHtml(product.name) + '" loading="lazy" data-fallback="logo.svg"><span class="color-badge">' + escapeHtml(product.color) + '</span></a>' +
     '<div class="product-copy"><p class="product-category">Color · ' + escapeHtml(product.color) + '</p><h3><a href="' + escapeHtml(detailLink) + '">' + escapeHtml(product.name) + '</a></h3>' +
-    '<p class="product-description">' + escapeHtml(summary) + '</p><div class="product-footer"><strong>' + money(product.price) + '</strong><div class="card-actions"><a class="text-button" href="' + escapeHtml(detailLink) + '">View details →</a><a class="text-button" href="' + escapeHtml(buildWhatsAppLink(product)) + '" target="_blank" rel="noopener">WhatsApp</a></div></div></div></article>';
+    '<p class="product-description">' + escapeHtml(summary) + '</p><div class="product-footer"><strong>' + money(product.price) + '</strong><div class="card-actions"><a class="text-button detail-link" href="' + escapeHtml(detailLink) + '">View details →</a><a class="card-whatsapp" href="' + escapeHtml(buildWhatsAppLink(product)) + '" target="_blank" rel="noopener" aria-label="Ask about ' + escapeHtml(product.name) + ' on WhatsApp"><img src="whatsapp.svg" alt="" width="24" height="24"></a></div></div></div></article>';
 };
 
 const wireImageFallbacks = () => {
@@ -47,6 +47,7 @@ const render = async () => {
   grid.innerHTML = visible.length ? visible.map(productCard).join("") : '<div class="empty"><strong>No products found.</strong><br>Try another name or color.</div>';
   pagination.innerHTML = pages <= 1 ? "" : Array.from({ length: pages }, (_, index) => '<button type="button" data-page="' + (index + 1) + '" ' + (page === index + 1 ? 'aria-current="page"' : "") + '>' + (index + 1) + '</button>').join("");
   wireImageFallbacks();
+  document.querySelectorAll("[data-product-search]").forEach((button) => button.classList.toggle("active", button.dataset.productSearch === search));
   grid.setAttribute("aria-busy", "false");
 };
 
@@ -68,9 +69,36 @@ grid.addEventListener("click", (event) => {
   if (!card || event.target.closest("a, button, input, select, textarea")) return;
   location.href = card.dataset.href;
 });
+document.querySelector(".category-shortcuts").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-product-search]");
+  if (!button) return;
+  form.elements.search.value = button.dataset.productSearch;
+  form.elements.color.value = "";
+  page = 1;
+  render();
+});
+const menuButton = document.querySelector(".menu-toggle");
+const menu = document.querySelector("#main-menu");
+menuButton.addEventListener("click", () => {
+  const open = menu.classList.toggle("open");
+  menuButton.setAttribute("aria-expanded", String(open));
+});
+menu.addEventListener("click", () => {
+  menu.classList.remove("open");
+  menuButton.setAttribute("aria-expanded", "false");
+});
 subscribeCatalogChanges(() => {
   page = 1;
   render();
 });
+const canonicalUrl = new URL("./", document.baseURI);
+document.querySelector('link[rel="canonical"]').href = canonicalUrl.href;
+document.querySelector('meta[property="og:image"]').content = new URL("images/cable-image.png", canonicalUrl).href;
+const storeSchema = document.querySelector("#store-schema");
+const storeData = JSON.parse(storeSchema.textContent);
+storeData.url = canonicalUrl.href;
+storeData.logo = new URL("logo.svg", canonicalUrl).href;
+storeData.image = new URL("images/cable-image.png", canonicalUrl).href;
+storeSchema.textContent = JSON.stringify(storeData);
 document.querySelector("#year").textContent = new Date().getFullYear();
 render();

@@ -35,6 +35,8 @@ Browser edits are immediately visible on the same browser and computer. To make 
 4. Run `npm start` and check the storefront and product pages.
 5. Upload the contents of `public` to your static host.
 
+For Cloudflare Pages connected to GitHub, commit and push the replaced `public/data/products.json` file. Do not manage products from a unique Cloudflare preview URL: every preview address has separate browser storage. Use localhost for editing, or use one stable production/custom-domain address, and always publish the exported catalog through GitHub before deploying other site changes.
+
 The exported JSON contains the optimized product photos, so there are no extra image files to copy. Existing legacy products with one image stay visible, but the editor will require a second image before the public catalog can be exported.
 
 Use **Download backup** to save the browser catalog without publication validation. Use **Restore backup** to load that file later.

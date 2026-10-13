@@ -1,5 +1,5 @@
-import { MAX_DESCRIPTIONS, MAX_IMAGES, MAX_PRODUCTS, cleanProduct, exportableCatalogErrors, readProducts, resetProducts, validImage, validateProduct, writeProducts } from "./catalog.js?v=5";
-import { escapeHtml, money, showNotice } from "./ui.js?v=5";
+import { MAX_DESCRIPTIONS, MAX_IMAGES, MAX_PRODUCTS, cleanProduct, exportableCatalogErrors, readProducts, resetProducts, validImage, validateProduct, writeProducts } from "./catalog.js?v=7";
+import { escapeHtml, money, showNotice } from "./ui.js?v=7";
 
 const form = document.querySelector("#product-form");
 const list = document.querySelector("#admin-list");
@@ -163,7 +163,7 @@ form.addEventListener("submit", async (event) => {
     products = await writeProducts(products);
     renderList();
     selectProduct(product);
-    showNotice(notice, "Product saved in this browser.");
+    showNotice(notice, "Product saved in this browser. Export the public catalog before your next GitHub or Cloudflare update.");
   } catch {
     showNotice(notice, "The browser could not save the catalog. Free some device storage and try again.", "error");
   }
@@ -188,7 +188,7 @@ document.querySelector("#export-catalog").addEventListener("click", () => {
   const errors = exportableCatalogErrors(products);
   if (errors.length) return showNotice(notice, "Catalog not exported. " + errors.slice(0, 3).join(" ") + (errors.length > 3 ? " Fix the remaining products too." : ""), "error");
   downloadCatalog("products.json", products);
-  showNotice(notice, "Public catalog exported. Replace public/data/products.json with the downloaded file.");
+  showNotice(notice, "Public catalog exported. Replace public/data/products.json, then commit and push it to GitHub.");
 });
 
 document.querySelector("#download-backup").addEventListener("click", () => {
