@@ -21,6 +21,8 @@ wheels/
 uploads/
 
 # Next.js / Node
+node_modules/
+artifacts/
 frontend/node_modules/
 frontend/.next/
 frontend/out/

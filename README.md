@@ -1,18 +1,40 @@
-# Hassan Electric & Traders
+# ST Electric Store
 
-SEO-first Next.js storefront with a Cloudflare Worker and D1 catalogue API. The frontend includes clean product/category URLs, product and local-business schema, canonical metadata, `robots.txt`, dynamic sitemap generation, mobile contact actions, local content, FAQs and 404 handling.
+A database-free product catalog for ST Electric Store.
 
-## Local development
+## Run on localhost
 
-1. In `frontend`, copy `.env.example` to `.env.local`, then run `npm install` and `npm run dev`.
-2. The live catalogue is served by `cloudflare-api` and Cloudflare D1; configure the API Worker URL as `NEXT_PUBLIC_API_URL` for frontend builds.
+1. Open PowerShell in this folder.
+2. Run `npm start`.
+3. Open `http://localhost:3000`.
+4. Open the editor at `http://localhost:3000/admin.html`.
 
-The storefront starts with clear sample catalogue entries in `frontend/lib/catalog.ts`. Move content to the API/database as the admin system is built; product SEO fields already exist in the backend model.
+No installation, database, API, or environment file is required. Python must be installed because the start command uses Python's static file server.
 
-## Deployment
+## Add or edit products
 
-1. Push this folder to GitHub.
-2. In Cloudflare Workers, connect the repository with Root directory `frontend`, Build command `npm run build:vinext`, and Deploy command `npm run deploy:vinext`.
-3. Add `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_API_URL` as frontend Worker build variables. Deploy `cloudflare-api` as the separate catalogue Worker and bind it to D1.
+Each new or edited product requires:
 
-Admin product and category changes are stored in Cloudflare D1 and appear on the storefront immediately after saving.
+- Product name
+- Optional PKR price; leave it empty to display **Ask for price**
+- Color
+- Two to five JPG, PNG, or WebP photos selected from the computer
+- One to three short description points
+
+Selected photos are resized and compressed before the catalog is saved in the browser. A Windows file path cannot be pasted into a website, so use **Choose photos** instead.
+
+Product cards open a dedicated detail page with a gallery. The WhatsApp message includes the product name, color, price, and full product-page link.
+
+## Publish catalog changes
+
+Browser edits are immediately visible on the same browser and computer. To make those changes visible to every visitor:
+
+1. Finish editing all products.
+2. Select **Export public catalog**.
+3. Replace `public/data/products.json` with the downloaded `products.json` file.
+4. Run `npm start` and check the storefront and product pages.
+5. Upload the contents of `public` to your static host.
+
+The exported JSON contains the optimized product photos, so there are no extra image files to copy. Existing legacy products with one image stay visible, but the editor will require a second image before the public catalog can be exported.
+
+Use **Download backup** to save the browser catalog without publication validation. Use **Restore backup** to load that file later.

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 96" role="img" aria-labelledby="logo-title logo-desc">
+  <title id="logo-title">ST Electric Store</title>
+  <desc id="logo-desc">A green electrical bolt inside an S-shaped circuit mark.</desc>
+  <rect x="2" y="2" width="92" height="92" rx="22" fill="#e6f6e7"/>
+  <path d="M24 30c0-9 7-16 16-16h22c8 0 14 6 14 14v2H62v-1c0-2-2-4-5-4H41c-3 0-5 2-5 5s2 5 5 5h18c11 0 20 9 20 20s-9 20-20 20H37c-10 0-18-8-18-18v-3h14v2c0 4 3 7 7 7h18c4 0 7-3 7-7s-3-7-7-7H40c-9 0-16-8-16-19Z" fill="#195c34"/>
+  <path d="m55 16-18 32h13l-7 30 25-39H54l10-23Z" fill="#36a360" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>
+  <text x="116" y="55" fill="#173524" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="800" letter-spacing="-1">ST ELECTRIC</text>
+  <text x="118" y="78" fill="#50705b" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="2.6">STORE · ISLAMABAD</text>
+</svg>

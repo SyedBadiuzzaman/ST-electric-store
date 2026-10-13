@@ -1,1 +1,0 @@
-ALTER TABLE products ADD COLUMN colors_json TEXT NOT NULL DEFAULT '[]';
