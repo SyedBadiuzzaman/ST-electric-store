@@ -27,7 +27,7 @@ Product cards open a dedicated detail page with a gallery. The WhatsApp message 
 
 ## Publish catalog changes
 
-Browser edits are immediately visible on the same browser and computer. To make those changes visible to every visitor:
+Browser edits remain in the admin editor until they are published. The customer storefront always reloads the deployed `public/data/products.json` file and does not use browser-saved product data. To make changes visible to every visitor:
 
 1. Finish editing all products.
 2. Select **Download products.json**.

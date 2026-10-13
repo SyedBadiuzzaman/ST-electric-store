@@ -95,7 +95,9 @@ export const subscribeCatalogChanges = (callback) => {
 
 const readPublicCatalog = async () => {
   try {
-    const response = await fetch("data/products.json", { cache: "no-store" });
+    const catalogUrl = new URL("data/products.json", document.baseURI);
+    catalogUrl.searchParams.set("refresh", Date.now().toString());
+    const response = await fetch(catalogUrl, { cache: "no-store" });
     if (!response.ok) throw new Error("Published catalog is unavailable.");
     const value = await response.json();
     if (!Array.isArray(value)) throw new Error("Published catalog has an invalid format.");

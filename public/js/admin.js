@@ -1,4 +1,4 @@
-import { MAX_DESCRIPTIONS, MAX_IMAGES, MAX_PRODUCTS, cleanProduct, exportableCatalogErrors, readProducts, readPublishedProducts, resetProducts, validImage, validateProduct, writeProducts } from "./catalog.js?v=8";
+import { MAX_DESCRIPTIONS, MAX_IMAGES, MAX_PRODUCTS, cleanProduct, exportableCatalogErrors, readProducts, readPublishedProducts, resetProducts, validImage, validateProduct, writeProducts } from "./catalog.js?v=11";
 import { escapeHtml, money, showNotice } from "./ui.js?v=7";
 
 const form = document.querySelector("#product-form");

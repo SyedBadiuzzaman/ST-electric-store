@@ -1,4 +1,4 @@
-import { readProducts, subscribeCatalogChanges } from "./catalog.js?v=10";
+import { readPublishedProducts, subscribeCatalogChanges } from "./catalog.js?v=11";
 import { buildWhatsAppLink, escapeHtml, money } from "./ui.js?v=9";
 
 const view = document.querySelector("#product-view");
@@ -67,7 +67,7 @@ const renderProduct = (product) => {
 };
 
 const refreshProduct = async () => {
-  const products = await readProducts();
+  const products = await readPublishedProducts();
   const product = products.find((item) => item.id === id);
   if (product) renderProduct(product);
   else showMissing();

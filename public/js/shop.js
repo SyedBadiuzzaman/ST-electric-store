@@ -1,4 +1,4 @@
-import { readProducts, subscribeCatalogChanges } from "./catalog.js?v=10";
+import { readPublishedProducts, subscribeCatalogChanges } from "./catalog.js?v=11";
 import { buildWhatsAppLink, escapeHtml, money, productHref } from "./ui.js?v=7";
 
 const form = document.querySelector("#filters");
@@ -35,7 +35,7 @@ const updateColors = (products) => {
 
 const render = async () => {
   grid.setAttribute("aria-busy", "true");
-  const products = await readProducts();
+  const products = await readPublishedProducts();
   updateColors(products);
   const search = form.elements.search.value.trim().toLowerCase();
   const color = colorSelect.value;
